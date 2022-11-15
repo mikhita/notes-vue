@@ -2,26 +2,46 @@
   import {ref} from "vue"
 
   const showModal = ref(false)
+
+  const newNote = ref("")
+
+  const notes = ref([])
+
+  function getRandomColor(){
+    return 'hsla(' + (Math.random() * 360) + ', 100%, 50%, 1)';
+  }
+
+  const addNote = ()=> {
+    notes.value.push({
+      id: Math.floor(Math.random() * 1000000),
+      text: newNote.value,
+      date:new Date(),
+      backgroundColor: getRandomColor()
+    });
+    showModal = false;
+    newNote='';    
+
+  }
 </script>
 
 <template>
   <main>
-    <div class="overlay">
+    <div v-if="showModal" class="overlay">
       <div class="modal">
-        <textarea name="note" id="note" cols="30" rows="10"></textarea>
-        <button > Add Note</button>
-        <button class="close"> Close</button>
+        <textarea v-model="newNote" name="note" id="note" cols="30" rows="10"></textarea>
+        <button  @click="addNote()"> Add Note</button>
+        <button @click="addNote()"> Close</button>
       </div>
     </div>
     <div class="container">
       <header>
-        <h1>Notes</h1>
+        <h1>Notes {{notes}}</h1>
         <button @click="showModal = true">+</button>
       </header>
       <div class="cards-container">
         <div class="card">
           <p class="main-text"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate tenetur harum molestiae a, laborum earum iusto, nihil modi, nemo repellendus neque. Omnis, possimus doloremque. Eveniet quod neque cumque earum laboriosam!</p>
-          <p class="date">08/09/2022</p>
+          <p class="date">{{date}}</p>
         </div>
       </div>
     </div>
