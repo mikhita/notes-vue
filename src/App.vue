@@ -7,20 +7,26 @@
 
   const notes = ref([])
 
+  const errorMessage = ref("")
+
   function getRandomColor(){
     return 'hsla(' + (Math.random() * 360) + ', 100%, 50%, 1)';
   }
 
   const addNote = ()=> {
+    if(newNote.value.trim.length<9){
+      return errorMessage.value = "Note should be more than 10 charecters"
+    }
     notes.value.push({
       id: Math.floor(Math.random() * 1000000),
       text: newNote.value,
-      date:new Date(),
+      date: new Date(),
       backgroundColor: getRandomColor()
     });
-    showModal = false;
-    newNote='';    
-
+    showModal.value = false;
+    newNote.value =''; 
+    errorMessage.value = "";   
+  
   }
 </script>
 
@@ -28,20 +34,21 @@
   <main>
     <div v-if="showModal" class="overlay">
       <div class="modal">
-        <textarea v-model="newNote" name="note" id="note" cols="30" rows="10"></textarea>
+        <textarea v-model.trim="newNote" name="note" id="note" cols="30" rows="10"></textarea>
+        <p v-if="errorMessage">{{errorMessage}}</p>
         <button  @click="addNote()"> Add Note</button>
-        <button @click="addNote()"> Close</button>
+        <button @click="showModal = false" class="close"> Close</button>
       </div>
     </div>
     <div class="container">
       <header>
-        <h1>Notes {{notes}}</h1>
+        <h1>Notes</h1>
         <button @click="showModal = true">+</button>
       </header>
       <div class="cards-container">
-        <div class="card">
-          <p class="main-text"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate tenetur harum molestiae a, laborum earum iusto, nihil modi, nemo repellendus neque. Omnis, possimus doloremque. Eveniet quod neque cumque earum laboriosam!</p>
-          <p class="date">{{date}}</p>
+        <div v-for="note in notes" :key="note.id" class="card" id={{note.id}} :style="{backgroundColor:note.backgroundColor}">
+          <p class="main-text"> {{ note.text }} </p>
+          <p class="date">{{ note.date.toISOString().split('T')[0]}} /{{ note.date.toTimeString().split(' ')[0]}} </p>
         </div>
       </div>
     </div>
@@ -133,6 +140,9 @@
     max-height: 100vh;
   }
 
+  .modal p {
+    color: red;
+  }
   textarea{
     position: relative;
     max-width: 100%;
