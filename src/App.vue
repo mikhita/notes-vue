@@ -37,7 +37,7 @@
         <textarea v-model.trim="newNote" name="note" id="note" cols="30" rows="10"></textarea>
         <p v-if="errorMessage">{{errorMessage}}</p>
         <button  @click="addNote()"> Add Note</button>
-        <button @click="showModal = false" class="close"> Close</button>
+        <button @click="showModal = false, newNote ='' " class="close"> Close</button>
       </div>
     </div>
     <div class="container">
