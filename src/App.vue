@@ -14,7 +14,7 @@
   }
 
   const addNote = ()=> {
-    if(newNote.value.trim.length<9){
+    if(newNote.value.length<9){
       return errorMessage.value = "Note should be more than 10 charecters"
     }
     notes.value.push({
